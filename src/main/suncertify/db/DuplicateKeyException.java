@@ -1,4 +1,4 @@
-package suncertify.db;
+package main.suncertify.db;
 
 /**
  *
