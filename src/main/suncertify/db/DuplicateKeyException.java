@@ -14,7 +14,7 @@ public class DuplicateKeyException extends Exception {
 	 * message.
 	 */
 	public DuplicateKeyException() {
-	};
+	}
 
 	/**
 	 * Creates an instance of a DuplicateKeyException with the specified
@@ -22,7 +22,7 @@ public class DuplicateKeyException extends Exception {
 	 */
 	public DuplicateKeyException(String message) {
 		this.message = message;
-	};
+	}
 
 	/**
 	 * Returns the detail message string of this DuplicateKeyException.
@@ -30,5 +30,5 @@ public class DuplicateKeyException extends Exception {
 	@Override
 	public String getMessage() {
 		return message;
-	};
+	}
 }

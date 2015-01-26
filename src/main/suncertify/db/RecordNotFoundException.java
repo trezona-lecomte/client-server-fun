@@ -14,7 +14,7 @@ public class RecordNotFoundException extends Exception {
 	 * message.
 	 */
 	public RecordNotFoundException() {
-	};
+	}
 
 	/**
 	 * Creates an instance of a RecordNotFoundException with the specified
@@ -22,7 +22,7 @@ public class RecordNotFoundException extends Exception {
 	 */
 	public RecordNotFoundException(String message) {
 	    this.message = message;
-	};
+	}
 
 	/**
 	 * Returns the detail message string of this RecordNotFoundException.
@@ -30,6 +30,6 @@ public class RecordNotFoundException extends Exception {
 	@Override
 	public String getMessage() {
 	    return message;
-	};
+	}
 
 }
