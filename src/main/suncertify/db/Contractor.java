@@ -63,5 +63,28 @@ public class Contractor implements Serializable {
 	public int getOwner() {
 		return owner;
 	}
-	
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
+	public void setSpecialties(String[] specialties) {
+		this.specialties = specialties;
+	}
+
+	public void setSize(double size) {
+		this.size = size;
+	}
+
+	public void setRate(double rate) {
+		this.rate = rate;
+	}
+
+	public void setOwner(int owner) {
+		this.owner = owner;
+	}
 }
