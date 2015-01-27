@@ -16,6 +16,7 @@ public class Contractor implements Serializable {
 	public Contractor() {
 	}
 
+	//TODO: change the exposed type of specialties to a comma-delimited string.
 	public Contractor(String name, String location, String[] specialties, double size,
 					  double rate, int	owner) {
 		this.name = name;
@@ -48,6 +49,7 @@ public class Contractor implements Serializable {
 		return location;
 	}
 
+	//TODO: change the exposed type of specialties to a comma-delimited string.
 	public String[] getSpecialties() {
 		return specialties;
 	}
@@ -72,6 +74,7 @@ public class Contractor implements Serializable {
 		this.location = location;
 	}
 
+	//TODO: change the exposed type of specialties to a comma-delimited string.
 	public void setSpecialties(String[] specialties) {
 		this.specialties = specialties;
 	}
