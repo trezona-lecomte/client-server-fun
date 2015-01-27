@@ -16,7 +16,8 @@ public class Contractor implements Serializable {
 	public Contractor() {
 	}
 
-	public Contractor(String name, String location, String[] specialties, double size, double rate, int	owner) {
+	public Contractor(String name, String location, String[] specialties, double size,
+					  double rate, int	owner) {
 		this.name = name;
 		this.location = location;
 		this.specialties = specialties;
@@ -31,9 +32,12 @@ public class Contractor implements Serializable {
 		}
 		Contractor otherContractor = (Contractor) contractor;
 
-
 		return (name == null) ? (otherContractor.getName() == null)
 							  : name.equals(otherContractor.getName());
+	}
+
+	public int hashCode() {
+		return name.hashCode();
 	}
 
 	public String getName() {
