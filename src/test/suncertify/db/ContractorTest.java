@@ -1,64 +1,119 @@
 package test.suncertify.db;
 
 import main.suncertify.db.Contractor;
-
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+/**
+ * Tests for {@link main.suncertify.db.Contractor}.
+ */
 public class ContractorTest {
 
-    private static final double DELTA = 1e-15;
+    private Contractor contractorA;
+    private Contractor contractorB;
+    private Contractor contractorC;
 
-    private String[] specialties = {"Drainlaying", "Plumbing", "Building"};
-
-    private Contractor contractor = new Contractor("Test Contractor", "Wellington", specialties, 15,  80.00, 12345678);
-
-    @Test
-    public void testEqualsTrue() {
-        Contractor contractor2 = new Contractor();
-        Contractor contractor3 = contractor2;
-        assertTrue(contractor2.equals(contractor3));
+    @Before
+    public void setUp() throws Exception {
+        contractorA = new Contractor();
+        contractorB = new Contractor();
+        contractorC = new Contractor();
+        contractorA.setName("McFarlane Contracting");
+        contractorB.setName("McFarlane Contracting");
+        contractorC.setName("Andy's Contracting");
     }
 
     @Test
-    public void testEqualsFalse() {
-        Contractor contractor4 = new Contractor();
-        assertFalse(contractor.equals(contractor4));
+    public void testEqualsSymmetric() throws Exception {
+        assertTrue(contractorA.equals(contractorB) && contractorB.equals(contractorA));
+        assertFalse(contractorA.equals(contractorC) && contractorC.equals(contractorA));
     }
 
     @Test
-    public void testGetName() {
-        assertEquals(contractor.getName(), "Test Contractor");
+    public void testEqualsReflexive() throws Exception {
+        assertTrue(contractorA.equals(contractorA));
+        assertTrue(contractorB.equals(contractorB));
+        assertTrue(contractorC.equals(contractorC));
     }
 
     @Test
-    public void testGetLocation() {
-        assertEquals(contractor.getLocation(), "Wellington");
+    public void testEqualsTransitive() throws Exception {
+        contractorC.setName("McFarlane Contracting");
+        assertTrue(contractorA.equals(contractorB));
+        assertTrue(contractorB.equals(contractorC));
+        assertTrue(contractorA.equals(contractorC));
     }
 
     @Test
-    public void testGetSpecialites() {
-        assertArrayEquals(contractor.getSpecialties(), specialties);
+    public void testEqualsConsistent() throws Exception {
+        contractorC.setName("Jerry's Contracting");
+        assertTrue(contractorA.equals(contractorB));
+        assertTrue(contractorA.equals(contractorB));
+        assertTrue(contractorA.equals(contractorB));
+        assertFalse(contractorA.equals(contractorC));
+        assertFalse(contractorA.equals(contractorC));
+        assertFalse(contractorA.equals(contractorC));
     }
 
     @Test
-    public void testGetSize() {
-        assertEquals(contractor.getSize(), 15, DELTA);
+    public void testEqualsNull() throws Exception {
+        assertFalse(contractorA.equals(null));
     }
 
     @Test
-    public void testGetRate() {
-        assertEquals(contractor.getRate(), 80.00, DELTA);
+    public void testHashCodeEqual() throws Exception {
+        assertEquals(contractorA.hashCode(), contractorB.hashCode());
     }
 
     @Test
-    public void testGetOwner() {
-        assertEquals(contractor.getOwner(), 12345678);
+    public void testHashCodeConsistent() throws Exception {
+        int a = contractorA.hashCode();
+        int b = contractorA.hashCode();
+        int c = contractorA.hashCode();
+        assertEquals(a, b);
+        assertEquals(a, c);
+        assertEquals(a, contractorA.hashCode());
     }
 
+    @Test
+    public void testSetAndGetName() throws Exception {
+        contractorA.setName("Johnny's Contracting");
+        assertEquals(contractorA.getName(), "Johnny's Contracting");
+    }
 
+    @Test
+    public void testSetAndGetLocation() throws Exception {
+        contractorA.setLocation("Wellington");
+        assertEquals(contractorA.getLocation(), "Wellington");
+    }
 
+    @Test
+    public void testSetAndGetSpecialties() throws Exception {
+        String[] specialties = {"Drainlaying, plubming, building, carpeting"};
+        contractorA.setSpecialties(specialties);
+        assertArrayEquals(contractorA.getSpecialties(), specialties);
+    }
 
+    @Test
+    public void testSetAndGetSize() throws Exception {
+        contractorA.setSize(20);
+        assertTrue(contractorA.getSize() == 20);
 
+    }
+
+    @Test
+    public void testSetAndGetRate() throws Exception {
+        contractorA.setRate(50.50);
+        assertTrue(contractorA.getRate() == 50.50);
+
+    }
+
+    @Test
+    public void testSetAndGetOwner() throws Exception {
+        contractorA.setOwner(0001234);
+        assertEquals(contractorA.getOwner(), 0001234);
+
+    }
 }
