@@ -10,14 +10,26 @@ public class ContractorDatabase implements DB {
 
     private static BookingManager bookingManager = new BookingManager();
 
-    private static ContractorDbFile databaseFile = null;
+    private static ContractorDbFile database = null;
 
-    public ContractorDatabase() throws FileNotFoundException, IOException {
+    /**
+     * Assumes that the database file is in the current working directory
+     * and calls constructor with this directory as the argument.
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
+    public ContractorDatabase() throws DatabaseAccessException, IOException {
         this(System.getProperty("user.dir"));
     }
 
-    public ContractorDatabase(String dbFilePath) throws FileNotFoundException, IOException {
-        databaseFile = new ContractorDbFile(dbFilePath);
+    /**
+     * Allows the filepath of the ContractorDatabase to be specified.
+     * @throws FileNotFoundException
+     * @throws IOException
+     * @param dbFilePath The filepath of the database.
+     */
+    public ContractorDatabase(String dbFilePath) throws DatabaseAccessException, IOException {
+        database = new ContractorDbFile(dbFilePath);
     }
 
     /**
