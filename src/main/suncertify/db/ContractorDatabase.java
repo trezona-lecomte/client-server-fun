@@ -1,5 +1,8 @@
 package main.suncertify.db;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 /**
  * Created by Kieran Trezona-le Comte on 28/01/15.
  */
@@ -7,7 +10,15 @@ public class ContractorDatabase implements DB {
 
     private static BookingManager bookingManager = new BookingManager();
 
-    private static ContractorFileAccess databaseFile = null;
+    private static ContractorDbFile databaseFile = null;
+
+    public ContractorDatabase() throws FileNotFoundException, IOException {
+        this(System.getProperty("user.dir"));
+    }
+
+    public ContractorDatabase(String dbFilePath) throws FileNotFoundException, IOException {
+        databaseFile = new ContractorDbFile(dbFilePath);
+    }
 
     /**
      * Reads a record from the file. Returns an array where each
