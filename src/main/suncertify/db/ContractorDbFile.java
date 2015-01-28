@@ -2,6 +2,7 @@ package main.suncertify.db;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -27,7 +28,7 @@ class ContractorDbFile {
     private static final String DATABASE_NAME = "db-2x2.db";
     private Logger log = Logger.getLogger("suncertify.db");
     private static RandomAccessFile databaseFile = null;
-    private static Map<String, Long> recordNumbers = new HashMap<String, long>();
+    private static Map<String, Long> recordNumbers = new HashMap<String, Long>();
     private static ReadWriteLock recordNumberLock = new ReentrantReadWriteLock();
     private static String emptyRecordString = null;
     private static String dbPath = null;
@@ -92,9 +93,11 @@ class ContractorDbFile {
      * @return  The Contractor found or null if not found.
      * @throws IOException
      */
-    private Contractor retrieveContractor(Long positionInFile)  throws IOException {
+    private Contractor retrieveContractor(Long positionInFile)
+            throws IOException, RecordLengthExceededException {
         log.entering("ContractorDbFile", "retrieveContractor", positionInFile);
         final byte[] recordTemplateByteArray = new byte[Contractor.RECORD_LENGTH];
+        Contractor contractor;
 
         // Exclusively locate & read the record from the database file in an atomic operation.
         synchronized (databaseFile) {
@@ -131,25 +134,16 @@ class ContractorDbFile {
         String size = fieldReader.read(Contractor.SIZE_LENGTH);
         String rate = fieldReader.read(Contractor.RATE_LENGTH);
         String owner = fieldReader.read(Contractor.OWNER_LENGTH);
-    }
 
-        RecordFieldReader readRecord = new RecordFieldReader();
-        String upc = readRecord.read(DVD.UPC_LENGTH);
-        String name = readRecord.read(DVD.NAME_LENGTH);
-        String composer = readRecord.read(DVD.COMPOSER_LENGTH);
-        String director = readRecord.read(DVD.DIRECTOR_LENGTH);
-        String leadActor = readRecord.read(DVD.LEAD_ACTOR_LENGTH);
-        String supportingActor = readRecord.read(DVD.SUPPORTING_ACTOR_LENGTH);
-        String year = readRecord.read(DVD.YEAR_LENGTH);
-        int copy = Integer.parseInt(readRecord.read(DVD.COPIES_LENGTH));
+        if ("DELETED".equals(name)) {
+            return null;
+        } else
+        {
+            contractor = new Contractor(name, location, specialties, size, rate, owner);
+        }
 
-        DVD returnValue = ("DELETED".equals(upc))
-                ? null
-                : new DVD(upc, name, composer, director, leadActor,
-                supportingActor, year, copy);
-
-        log.exiting("DvdFileAccess", "retrieveDvd", returnValue);
-        return returnValue;
+        log.exiting("ContractorDbFile", "retrieveContractor", contractor);
+        return contractor;
     }
 
     /**
