@@ -7,6 +7,8 @@ public class ContractorDatabase implements DB {
 
     private static BookingManager bookingManager = new BookingManager();
 
+    private static ContractorFileAccess = null;
+
     /**
      * Reads a record from the file. Returns an array where each
      * element is a record value.
