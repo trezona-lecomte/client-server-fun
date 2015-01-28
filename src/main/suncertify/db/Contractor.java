@@ -12,13 +12,22 @@ public class Contractor implements Serializable {
 	private double size = 0;
 	private double rate = 0;
 	private int owner = 0;
-	
+
+	static final int NAME_LENGTH = 32;
+	static final int LOCATION_LENGTH = 64;
+	static final int SPECIALTIES_LENGTH = 64;
+	static final int SIZE_LENGTH = 6;
+	static final int RATE_LENGTH = 8;
+	static final int OWNER_LENGTH = 8;
+	static final int RECORD_LENGTH = NAME_LENGTH + LOCATION_LENGTH + SPECIALTIES_LENGTH
+								   + SIZE_LENGTH + RATE_LENGTH + OWNER_LENGTH;
+
 	public Contractor() {
 	}
 
 	//TODO: change the exposed type of specialties to a comma-delimited string.
-	public Contractor(String name, String location, String[] specialties, double size,
-					  double rate, int	owner) {
+	public Contractor(String name, String location, String specialties, String size,
+					  String rate, String owner) {
 		this.name = name;
 		this.location = location;
 		this.specialties = specialties;
@@ -89,5 +98,9 @@ public class Contractor implements Serializable {
 
 	public void setOwner(int owner) {
 		this.owner = owner;
+	}
+
+	private static String[] toArray(String csvLine) {
+
 	}
 }
