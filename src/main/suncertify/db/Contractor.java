@@ -25,15 +25,15 @@ public class Contractor implements Serializable {
 	public Contractor() {
 	}
 
-	//TODO: change the exposed type of specialties to a comma-delimited string.
-	public Contractor(String name, String location, String specialties, String size,
-					  String rate, String owner) {
-		this.name = name;
-		this.location = location;
-		this.specialties = specialties;
-		this.size = size;
-		this.rate = rate;
-		this.owner = owner;
+	public Contractor (String name, String location, String specialties,
+					   String size, String rate, String owner) throws RecordLengthExceededException
+	{
+			this.name = toSizedString(name, NAME_LENGTH);
+			this.location = toSizedString(location, LOCATION_LENGTH);
+			this.specialties = toSizedArray(specialties, SPECIALTIES_LENGTH);
+			this.size = toSizedDouble(size, SIZE_LENGTH);
+			this.rate = toSizedDouble(rate, RATE_LENGTH);
+			this.owner = toSizedInt(owner, OWNER_LENGTH);
 	}
 
 	public boolean equals(Object contractor) {
@@ -58,7 +58,6 @@ public class Contractor implements Serializable {
 		return location;
 	}
 
-	//TODO: change the exposed type of specialties to a comma-delimited string.
 	public String[] getSpecialties() {
 		return specialties;
 	}
@@ -75,32 +74,73 @@ public class Contractor implements Serializable {
 		return owner;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setName(String name) throws RecordLengthExceededException {
+		this.name = toSizedString(name, NAME_LENGTH);;
 	}
 
-	public void setLocation(String location) {
-		this.location = location;
+	public void setLocation(String location) throws RecordLengthExceededException {
+		this.location = toSizedString(location, LOCATION_LENGTH);;
 	}
 
-	//TODO: change the exposed type of specialties to a comma-delimited string.
-	public void setSpecialties(String[] specialties) {
-		this.specialties = specialties;
+	public void setSpecialties(String specialties) throws RecordLengthExceededException {
+		this.specialties = toSizedArray(specialties, SPECIALTIES_LENGTH);
 	}
 
-	public void setSize(double size) {
-		this.size = size;
+	public void setSize(String size) throws RecordLengthExceededException {
+		this.size = toSizedDouble(size, SIZE_LENGTH);;
 	}
 
-	public void setRate(double rate) {
-		this.rate = rate;
+	public void setRate(String rate) throws RecordLengthExceededException {
+		this.rate = toSizedDouble(rate, RATE_LENGTH);;
 	}
 
-	public void setOwner(int owner) {
-		this.owner = owner;
+	public void setOwner(String owner) throws RecordLengthExceededException {
+		this.owner = toSizedInt(owner, OWNER_LENGTH);;
 	}
 
-	private static String[] toArray(String csvLine) {
+	private static String toSizedString(String field, int size)
+			throws RecordLengthExceededException {
+		if (field.length() <= size) {
+			return field;
+		}
+		else {
+			throw new RecordLengthExceededException("Field: " + field + " exceeds the maximum " +
+					"length. This field must be no longer than " + size + " characters.");
+		}
+	}
 
+	private static String[] toSizedArray(String field, int size)
+			throws RecordLengthExceededException {
+	if (field.length() <= size) {
+		return field.split(",");
+	}
+	else {
+		throw new RecordLengthExceededException("Field: " + field + " exceeds the maximum " +
+				"length. This field must be no longer than " + size + " characters.");
+	}
+	}
+
+	private static double toSizedDouble(String field, int size)
+			throws RecordLengthExceededException
+	{
+		if (field.length() <= size) {
+			return Double.parseDouble(field);
+		}
+		else {
+			throw new RecordLengthExceededException("Field: " + field + " exceeds the maximum " +
+					"length. This field must be no longer than " + size + " characters.");
+		}
+	}
+
+	private static int toSizedInt(String field, int size)
+			throws RecordLengthExceededException
+	{
+		if (field.length() <= size) {
+			return Integer.parseInt(field);
+		}
+		else {
+			throw new RecordLengthExceededException("Field: " + field + " exceeds the maximum " +
+					"length. This field must be no longer than " + size + " characters.");
+		}
 	}
 }
