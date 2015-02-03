@@ -57,20 +57,25 @@ public class Contractor implements Serializable {
 		return location;
 	}
 
-	public String[] getSpecialties() {
-		return specialties;
+	public String getSpecialties() {
+		String specialtyString = "";
+		for (String specialty : specialties) {
+			specialtyString += specialty + ",";
+		}
+		specialtyString = specialtyString.substring(0, specialtyString.length()-1);
+		return specialtyString;
 	}
 
-	public double getSize() {
-		return size;
+	public String getSize() {
+		return Double.toString(size);
 	}
 
-	public double getRate() {
-		return rate;
+	public String getRate() {
+		return Double.toString(rate);
 	}
 
-	public int getOwner() {
-		return owner;
+	public String getOwner() {
+		return Integer.toString(owner);
 	}
 
 	public void setName(String name) {
