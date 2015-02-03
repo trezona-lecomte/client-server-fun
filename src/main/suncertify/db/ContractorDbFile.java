@@ -1,13 +1,13 @@
 package main.suncertify.db;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 /**
  * An Adapter class for performing the low-level file IO operations to create, read, update and
@@ -144,6 +144,104 @@ class ContractorDbFile {
 
         log.exiting("ContractorDbFile", "retrieveContractor", contractor);
         return contractor;
+    }
+
+    /**
+     * Returns all matching contractors for the specified regular expression.
+     *
+     * @param query search criteria in the form of a regular expression.
+     * @return The list of Contractors (possibly empty) that match the query.
+     * @throws IOException If the database cannot be accessed.
+     * @throws PatternSyntaxException If the syntax of the specified regex is invalid.
+     */
+    public Collection<Contractor> find(String query) throws IOException, PatternSyntaxException {
+        log.entering("ContractorDbFile", "find", query);
+        Collection<Contractor> contractors = new ArrayList<Contractor>();
+        Pattern pattern = Pattern.compile(query);
+
+        for (Contractor contractor : getContractors()) {
+            Matcher matcher = pattern.matcher(contractor.toString());
+            if (matcher.find()) {
+                contractors.add(contractor);
+            }
+        }
+
+        log.exiting("ContractorDbFile", "find", contractors);
+        return contractors;
+    }
+
+    /**
+     * Adds a new contractor to the database, via the persistContractor method.
+     * @param contractor
+     * @return true if the contractor was added successfully, false otherwise.
+     */
+    public boolean addContractor(Contractor contractor) throws IOException {
+        return persistContractor(contractor, true);
+    }
+
+    /**
+     * Modifies existing information for the specified contractor, except for
+     * the contractor name which uniquely identifies the contractor so
+     * cannot be changed.
+     *
+     * @param Contractor The contractor to modify.
+     * @return Returns true if the Contractor was successfully modified.
+     * @throws IOException If there was a problem accessing the contractor record.
+     */
+    public boolean modifyContractor(Contractor Contractor) throws IOException {
+        return persistContractor(Contractor, false);
+    }
+
+    private boolean persistContractor(Contractor contractor, boolean creating) throws IOException {
+        log.entering("ContractorDbFile", "persistContractor", contractor);
+
+        Long cursor = 0L;
+        recordNumberLock.writeLock().lock();
+        try {
+            cursor = recordNumbers.get(contractor.getName());
+
+            if (creating == true && cursor == null) {       // If adding the record can't exist
+                log.info("creating contractor record " + contractor.getName());
+                cursor = databaseFile.length();
+                recordNumbers.put(contractor.getName(), cursor);
+            }
+            else if (creating == false && cursor != null) { // If updating the record must exist
+                log.info("updating contractor record " + contractor.getName());
+            }
+            else {
+                return false;
+            }
+        }
+        finally {
+            recordNumberLock.writeLock().unlock();
+        }
+
+        final StringBuilder out = new StringBuilder(emptyRecordString);
+
+        class FieldWriter {
+            int cursor = 0;
+
+            void write(String data, int length) {
+                out.replace(cursor, cursor + data.length(), data);
+                cursor += length;
+            }
+        }
+        FieldWriter recordWriter = new FieldWriter();
+
+        recordWriter.write(contractor.getName(), Contractor.NAME_LENGTH);
+        recordWriter.write(contractor.getLocation(), Contractor.LOCATION_LENGTH);
+        recordWriter.write(contractor.getSpecialties(), Contractor.SPECIALTIES_LENGTH);
+        recordWriter.write(contractor.getSize(), Contractor.SIZE_LENGTH);
+        recordWriter.write(contractor.getRate(), Contractor.RATE_LENGTH);
+        recordWriter.write(contractor.getOwner(), Contractor.OWNER_LENGTH);
+
+        synchronized(databaseFile) {
+            databaseFile.seek(cursor);
+            databaseFile.write(out.toString().getBytes());
+        }
+
+        log.exiting("ContractorDbFile", "persistContractor", true);
+        return true;
     }
 
     /**
