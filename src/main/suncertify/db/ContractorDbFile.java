@@ -94,7 +94,7 @@ class ContractorDbFile {
      * @throws IOException
      */
     private Contractor retrieveContractor(Long positionInFile)
-            throws IOException, RecordLengthExceededException {
+            throws IOException {
         log.entering("ContractorDbFile", "retrieveContractor", positionInFile);
         final byte[] recordTemplateByteArray = new byte[Contractor.RECORD_LENGTH];
         Contractor contractor;
@@ -130,10 +130,10 @@ class ContractorDbFile {
         FieldReader fieldReader = new FieldReader();
         String name = fieldReader.read(Contractor.NAME_LENGTH);
         String location = fieldReader.read(Contractor.LOCATION_LENGTH);
-        String specialties = fieldReader.read(Contractor.SPECIALTIES_LENGTH);
-        String size = fieldReader.read(Contractor.SIZE_LENGTH);
-        String rate = fieldReader.read(Contractor.RATE_LENGTH);
-        String owner = fieldReader.read(Contractor.OWNER_LENGTH);
+        String[] specialties = fieldReader.read(Contractor.SPECIALTIES_LENGTH).split(",");
+        Double size = Double.parseDouble(fieldReader.read(Contractor.SIZE_LENGTH));
+        Double rate = Double.parseDouble(fieldReader.read(Contractor.RATE_LENGTH));
+        int owner = Integer.parseInt(fieldReader.read(Contractor.OWNER_LENGTH));
 
         if ("DELETED".equals(name)) {
             return null;
