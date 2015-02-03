@@ -25,17 +25,17 @@ public class Contractor implements Serializable {
 	public Contractor() {
 	}
 
-	public Contractor (String name, String location, String specialties,
-					   String size, String rate, String owner) throws RecordLengthExceededException
-	{
-			this.name = toSizedString(name, NAME_LENGTH);
-			this.location = toSizedString(location, LOCATION_LENGTH);
-			this.specialties = toSizedArray(specialties, SPECIALTIES_LENGTH);
-			this.size = toSizedDouble(size, SIZE_LENGTH);
-			this.rate = toSizedDouble(rate, RATE_LENGTH);
-			this.owner = toSizedInt(owner, OWNER_LENGTH);
+	public Contractor (String name, String location, String[] specialties,
+					   Double size, Double rate, int owner) {
+			this.name = name;
+			this.location = location;
+			this.specialties = specialties;
+			this.size = size;
+			this.rate = rate;
+			this.owner = owner;
 	}
 
+	@Override
 	public boolean equals(Object contractor) {
 		if (! (contractor instanceof Contractor)) {
 			return false;
@@ -46,6 +46,7 @@ public class Contractor implements Serializable {
 							  : name.equals(otherContractor.getName());
 	}
 
+	@Override
 	public int hashCode() {
 		return name.hashCode();
 	}
@@ -74,73 +75,27 @@ public class Contractor implements Serializable {
 		return owner;
 	}
 
-	public void setName(String name) throws RecordLengthExceededException {
-		this.name = toSizedString(name, NAME_LENGTH);;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public void setLocation(String location) throws RecordLengthExceededException {
-		this.location = toSizedString(location, LOCATION_LENGTH);;
+	public void setLocation(String location) {
+		this.location = location;
 	}
 
-	public void setSpecialties(String specialties) throws RecordLengthExceededException {
-		this.specialties = toSizedArray(specialties, SPECIALTIES_LENGTH);
+	public void setSpecialties(String[] specialties) {
+		this.specialties = specialties;
 	}
 
-	public void setSize(String size) throws RecordLengthExceededException {
-		this.size = toSizedDouble(size, SIZE_LENGTH);;
+	public void setSize(Double size) {
+		this.size = size;
 	}
 
-	public void setRate(String rate) throws RecordLengthExceededException {
-		this.rate = toSizedDouble(rate, RATE_LENGTH);;
+	public void setRate(Double rate) {
+		this.rate = rate;
 	}
 
-	public void setOwner(String owner) throws RecordLengthExceededException {
-		this.owner = toSizedInt(owner, OWNER_LENGTH);;
-	}
-
-	private static String toSizedString(String field, int size)
-			throws RecordLengthExceededException {
-		if (field.length() <= size) {
-			return field;
-		}
-		else {
-			throw new RecordLengthExceededException("Field: " + field + " exceeds the maximum " +
-					"length. This field must be no longer than " + size + " characters.");
-		}
-	}
-
-	private static String[] toSizedArray(String field, int size)
-			throws RecordLengthExceededException {
-	if (field.length() <= size) {
-		return field.split(",");
-	}
-	else {
-		throw new RecordLengthExceededException("Field: " + field + " exceeds the maximum " +
-				"length. This field must be no longer than " + size + " characters.");
-	}
-	}
-
-	private static double toSizedDouble(String field, int size)
-			throws RecordLengthExceededException
-	{
-		if (field.length() <= size) {
-			return Double.parseDouble(field);
-		}
-		else {
-			throw new RecordLengthExceededException("Field: " + field + " exceeds the maximum " +
-					"length. This field must be no longer than " + size + " characters.");
-		}
-	}
-
-	private static int toSizedInt(String field, int size)
-			throws RecordLengthExceededException
-	{
-		if (field.length() <= size) {
-			return Integer.parseInt(field);
-		}
-		else {
-			throw new RecordLengthExceededException("Field: " + field + " exceeds the maximum " +
-					"length. This field must be no longer than " + size + " characters.");
-		}
+	public void setOwner(int owner) {
+		this.owner = owner;
 	}
 }
