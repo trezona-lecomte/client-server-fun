@@ -31,7 +31,7 @@ class ReservationManager {
 
     private Logger log = Logger.getLogger("suncertify.db");
 
-    boolean reverseContractor(String contractorName, ContractorDatabase database)
+    boolean reserveContractor(String contractorName, ContractorDatabase database)
             throws InterruptedException
     {
         log.entering("ReservationManager", "reserverContractor",
