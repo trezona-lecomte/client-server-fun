@@ -8,7 +8,7 @@ import java.io.IOException;
  */
 public class ContractorDatabase implements DB {
 
-    private static BookingManager bookingManager = new BookingManager();
+    private static ReservationManager reservationManager = new ReservationManager();
 
     private static ContractorDbFile database = null;
 
