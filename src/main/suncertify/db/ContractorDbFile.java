@@ -192,6 +192,13 @@ class ContractorDbFile {
         return persistContractor(Contractor, false);
     }
 
+    /**
+     *
+     * @param contractor
+     * @param creating
+     * @return
+     * @throws IOException
+     */
     private boolean persistContractor(Contractor contractor, boolean creating) throws IOException {
         log.entering("ContractorDbFile", "persistContractor", contractor);
 
