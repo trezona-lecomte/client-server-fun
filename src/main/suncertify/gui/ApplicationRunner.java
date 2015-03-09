@@ -35,7 +35,7 @@ public class ApplicationRunner {
         if (args.length == 0
             || "network".equalsIgnoreCase(args[0])
             || "local".equalsIgnoreCase(args[0])) {
-            new ApplicationWindow(args[0]);
+            new ApplicationWindow(args);
         }
         else {
             log.info("Invalid argument passed during start up: " + args[0]);
