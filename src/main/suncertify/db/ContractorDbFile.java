@@ -237,10 +237,10 @@ class ContractorDbFile {
 
         recordWriter.write(contractor.getName(), Contractor.NAME_LENGTH);
         recordWriter.write(contractor.getLocation(), Contractor.LOCATION_LENGTH);
-        recordWriter.write(contractor.getSpecialties(), Contractor.SPECIALTIES_LENGTH);
-        recordWriter.write(contractor.getSize(), Contractor.SIZE_LENGTH);
-        recordWriter.write(contractor.getRate(), Contractor.RATE_LENGTH);
-        recordWriter.write(contractor.getOwner(), Contractor.OWNER_LENGTH);
+        recordWriter.write(contractor.getSpecialties().toString(), Contractor.SPECIALTIES_LENGTH);
+        recordWriter.write(contractor.getSize().toString(), Contractor.SIZE_LENGTH);
+        recordWriter.write(contractor.getRate().toString(), Contractor.RATE_LENGTH);
+        recordWriter.write(Integer.toString(contractor.getOwner()), Contractor.OWNER_LENGTH);
 
         synchronized(databaseFile) {
             databaseFile.seek(cursor);
