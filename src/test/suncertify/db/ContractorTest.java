@@ -93,27 +93,27 @@ public class ContractorTest {
     public void testSetAndGetSpecialties() throws Exception {
         String[] specialties = {"Drainlaying, plubming, building, carpeting"};
         contractorA.setSpecialties(specialties);
-        assertEquals("Drainlaying, plubming, building, carpeting", contractorA.getSpecialties());
+        assertArrayEquals(specialties, contractorA.getSpecialties());
     }
 
     @Test
     public void testSetAndGetSize() throws Exception {
         contractorA.setSize(20.05);
-        assertEquals("20.05", contractorA.getSize());
+        assertTrue(20.05 == contractorA.getSize());
 
     }
 
     @Test
     public void testSetAndGetRate() throws Exception {
         contractorA.setRate(50.5);
-        assertEquals("50.5", contractorA.getRate());
+        assertTrue(50.5 == contractorA.getRate());
 
     }
 
     @Test
     public void testSetAndGetOwner() throws Exception {
         contractorA.setOwner(1234);
-        assertEquals("1234", contractorA.getOwner());
+        assertTrue(1234 == contractorA.getOwner());
 
     }
 }
